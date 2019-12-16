@@ -3,4 +3,4 @@ project(SecondPractical)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(SecondPractical main.cpp)
+add_executable(SecondPractical main.cpp Elevator.h Passenger.h Floor.h)

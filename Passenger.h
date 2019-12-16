@@ -1,0 +1,8 @@
+#ifndef SECONDPRACTICAL_PASSENGER_H
+#define SECONDPRACTICAL_PASSENGER_H
+
+struct Passenger {
+    int goalFloor;
+};
+
+#endif //SECONDPRACTICAL_PASSENGER_H
