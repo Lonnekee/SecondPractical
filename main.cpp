@@ -4,6 +4,22 @@
 
 using namespace std;
 
+void printState(int numFloor, Floor floorArray,Elevator elevator){
+    for(int i = numFloor; i>0; i--){
+        for(int j = 0; j<floorArray[i].maximumWaiting; j++){
+            if(floorArray[i].waitingPassenger[j].goalFloor != -1){
+                printf("%d ", floorArray[i].waitingPassenger[j].goalFloor);
+            }
+            printf("  ");
+            if(Elevator.currentFloor == i){
+                printf("| %d %d |", Elevator.goalFloors[0], Elevator.goalFloors[1]);
+            }
+            printf("\n");
+            printf("--------\n\n");
+        }
+    }
+}
+
 int main() {
     /*
      * number of states = (maximumWaiting+1 ^ numberOfFloors) * ( ( (capacity+1) * numberOfFloors * 2 ^ numberOfFloors) ^ numberOfLifts)
@@ -17,5 +33,11 @@ int main() {
     int numberOfStates = pow(maximumWaiting+1,numberOfFloors) * pow( pow( pow((capacity+1), numberOfFloors), pow(2, numberOfFloors)), numberOfLifts);
     cout << numberOfStates << endl;
 
+    Elevator elevatorOne = new Elevator;
+    Floor *floorArray = new Floor[numberOfFloors];
+    floorArray[0] = new Floor;
+    floorArray[1] = new Floor;
+    floorArray[2] = new Floor;
+    printState(numberOfFloors,floorArray,Elevator);
     return 0;
 }
