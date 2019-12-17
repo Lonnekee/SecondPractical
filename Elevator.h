@@ -3,12 +3,14 @@
 
 #include "Passenger.h"
 
+using namespace std;
+
 struct Elevator {
-    int capacity = 4;
-    int numberOfFloors = 5;
+    static const int capacity = 4;
+    static const int numberOfFloors = 5;
     int numberOfPassengers = 0;
     int currentFloor = 0;
-    int *goalFloors = new int[numberOfFloors];
+    vector<int> goalFloors;
 };
 
 

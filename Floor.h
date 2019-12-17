@@ -3,9 +3,12 @@
 
 #include "Passenger.h"
 
-struct Floor {
-    int maximumWaiting = 3;
-    Passenger *waitingPassengers = new Passenger[maximumWaiting];
+using namespace std;
+
+class Floor {
+public:
+    static const int maximumWaiting = 3;
+    vector<Passenger> waitingPassengers;
 };
 
 #endif //SECONDPRACTICAL_FLOOR_H

@@ -1,23 +1,34 @@
 #include <iostream>
 #include "Elevator.h"
 #include "Floor.h"
+#include "State.h"
 #include <math.h>
 
 using namespace std;
 
-void printState(int numFloor, Floor *floorArray,Elevator elevator){
+void printState(int numFloor, Floor *floorArray, Elevator elevator){
+    cout << endl;
     for(int i = numFloor-1; i>=0; i--){
-        for(int j = 0; j<floorArray[i].maximumWaiting; j++){
+        cout << "         " ;
+        for(int j = 0; j<floorArray[i].waitingPassengers.size(); j++){
             if(floorArray[i].waitingPassengers[j].goalFloor != -1) {
                 printf("%d ", floorArray[i].waitingPassengers[j].goalFloor);
             }
         }
-        printf("  ");
+
         if(elevator.currentFloor == i){
-            printf("| %d %d |", elevator.goalFloors[0], elevator.goalFloors[1]);
+            printf("\t\t");
+            printf("| ");
+            for (int goal = 0; goal < elevator.goalFloors.size(); goal++) {
+                printf("%1d  ",elevator.goalFloors[goal]);
+            }
+            for (int rest = 0; rest < elevator.capacity - elevator.goalFloors.size(); rest++) {
+                printf("   ");
+            }
+            printf("|");
         }
         printf("\n");
-        printf("--------\n\n");
+        printf("Floor %d ----------\n\n",i);
     }
 }
 
@@ -50,10 +61,13 @@ int main() {
 //        // randomly add waiting people on each floor.
 //    }
 
-    int numberOfFloors = 5;
-    Elevator elevatorOne;
-    Floor *floorArray = new Floor[numberOfFloors];
-    printState(numberOfFloors,floorArray,elevatorOne);
-    delete(floorArray);
+//    int numberOfFloors = 5;
+//    Elevator elevatorOne;
+//    Floor *floorArray = new Floor[numberOfFloors];
+//    printState(numberOfFloors,floorArray,elevatorOne);
+//    delete(floorArray);
+
+    State s;
+    printState(5,s.getFloors(),s.getElevators()[0]);
     return 0;
 }
