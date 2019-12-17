@@ -4,7 +4,7 @@
 #include "Passenger.h"
 
 struct Elevator {
-    int capacity = 2;
+    int capacity = 4;
     int numberOfFloors = 5;
     int numberOfPassengers = 0;
     int currentFloor = 0;
