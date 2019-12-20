@@ -8,9 +8,9 @@ using namespace std;
 struct Elevator {
     static const int capacity = 2;
     static const int numberOfFloors = 5;
-    int numberOfPassengers = 0;
     int currentFloor = 0;
-    int goalFloors[capacity];
+    int goalFloors[numberOfFloors] = {0};
+    vector<Passenger> passengers;
 };
 
 
