@@ -19,11 +19,11 @@ void printState(int numFloor, Floor *floorArray, Elevator elevator){
         if(elevator.currentFloor == i){
             printf("\t\t");
             printf("| ");
-            for (int goal = 0; goal < elevator.goalFloors.size(); goal++) {
+            for (int goal = 0; goal < elevator.capacity; goal++) {
                 printf("%1d  ",elevator.goalFloors[goal]);
             }
-            for (int rest = 0; rest < elevator.capacity - elevator.goalFloors.size(); rest++) {
-                printf("   ");
+            for (int rest = 0; rest < elevator.capacity - elevator.capacity; rest++) {
+                    printf("   ");
             }
             printf("|");
         }
@@ -41,6 +41,26 @@ int main() {
      * - 819199: int maximumWaiting = 3, numberOfFloors = 5, capacity = 4, numberOfLifts = 1;
      */
 
+//      To calculate the number of states:
+//    int maximumWaiting = 4, numberOfFloors = 3, capacity = 2, numberOfLifts = 2;
+//    int numberOfStates = pow(maximumWaiting+1,numberOfFloors) * pow(((capacity+1) * numberOfFloors * pow(2, numberOfFloors)), numberOfLifts);
+//    cout << numberOfStates << endl;
+    int maxEpochs = 100;
+    State s;
+    for(int i = 0; i<s.getElevators()->capacity; i++){
+        s.getElevators()[0].goalFloors[i] = -1;
+    }
+
+//    Elevator e;
+//    Floor f0, f1, f2, f3, f4;
+//    // Each floor should have a different random distribution for adding waiting people
+//    int maxEpochs = 1000;
+//
+//    int numberOfFloors = 5;
+//    Elevator elevatorOne;
+//    Floor *floorArray = new Floor[numberOfFloors];
+//    printState(numberOfFloors,floorArray,elevatorOne);
+//    delete(floorArray);
 //  To calculate the number of states:
     int maximumWaiting = 4, numberOfFloors = 3, capacity = 2, numberOfLifts = 1;
     int numberOfStates = pow(maximumWaiting+1,numberOfFloors) * pow(((capacity+1) * numberOfFloors * pow(2, numberOfFloors)), numberOfLifts);

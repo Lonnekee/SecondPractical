@@ -6,11 +6,11 @@
 using namespace std;
 
 struct Elevator {
-    static const int capacity = 4;
+    static const int capacity = 2;
     static const int numberOfFloors = 5;
     int numberOfPassengers = 0;
     int currentFloor = 0;
-    vector<int> goalFloors;
+    int goalFloors[capacity];
 };
 
 
