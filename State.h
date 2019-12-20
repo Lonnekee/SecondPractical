@@ -15,6 +15,24 @@ private:
     Elevator elevators[numberOfElevators];
     Floor floors[numberOfFloors];
 
+    void updateFloors() {
+        for(int i = 0; i < numberOfFloors; i++) {
+            int maximum = floors[i].maximumWaiting;
+            int length = floors[i].waitingPassengers.size();
+
+            if (length < maximum) {
+                default_random_engine generator;
+                poisson_distribution<int> distribution(0.5);
+
+                numberOfNewPeople = distribution(generator);
+                for (int j = 0; j < numberOfNewPeople && j < maximum - length; j++) {
+                    Passenger p;
+                    floors[i].waitingPassengers.push_back(p);
+                }
+            }
+        }
+    }
+
 public:
     State() {
         for (int i = 0; i < numberOfFloors; i++) {
@@ -26,6 +44,7 @@ public:
         }
     }
     void giveRewards();
+    void selectActions();
     void updateState();
 
     // Getters and setters
