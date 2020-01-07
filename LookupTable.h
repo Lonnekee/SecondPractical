@@ -45,7 +45,7 @@ public:
         return key;
     }
 
-    int addActionToKey(int *action, unsigned long long key) {
+    unsigned long long addActionToKey(int *action, unsigned long long key) {
         for (int i = 0; i < numberOfElevators; i++) {
             key *= 10;
             key += action[i];

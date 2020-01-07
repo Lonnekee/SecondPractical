@@ -22,8 +22,8 @@ int main() {
     int numberOfStates = pow(2, numberOfFloors) * pow((numberOfFloors * pow(2, numberOfFloors)), numberOfLifts);
     cout << "Number of states: " << numberOfStates << endl;
 
-    int maxRepetitions = 1000;
-    int maxEpochs = 1000;
+    int maxRepetitions = 10000;
+    int maxEpochs = 10000;
     double alpha = 0.05;
     double discountFactor = 0.5;
     double epsilon = 0.1;
@@ -48,15 +48,17 @@ int main() {
             int reward = s.getReward();
 
             // Get the best action to take in this state
-            newKey *= 10;
             double highestValue = -DBL_MIN;
             for (int i = 0; i < pow(3, numberOfLifts); i++) {
-                double value = lookupTable.getValue(newKey + i);
+                int *possibleActions = new int[numberOfLifts]{i};
+                unsigned long long key = lookupTable.addActionToKey(possibleActions, newKey);
+                double value = lookupTable.getValue(key);
                 if (value > highestValue) {
                     highestValue = value;
                     optimalAction = i;
                 }
             }
+            newKey *= 10;
             newKey += optimalAction;
 
             // Update lookupTable
@@ -79,7 +81,7 @@ int main() {
             cout << "Average finishing epoch: " << averageEpoch / 100 << endl;
             averageEpoch = 0;
 
-            lookupTable.print();
+            //lookupTable.print();
         }
     }
     return 0;
