@@ -22,7 +22,7 @@ int main() {
     int numberOfStates = pow(2, numberOfFloors) * pow((numberOfFloors * pow(2, numberOfFloors)), numberOfLifts);
     cout << "Number of states: " << numberOfStates << endl;
 
-    int maxRepetitions = 10000;
+    int maxRepetitions = 100000;
     int maxEpochs = 10000;
     double alpha = 0.05;
     double discountFactor = 0.5;

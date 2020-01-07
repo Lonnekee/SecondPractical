@@ -16,7 +16,7 @@ private:
     static const int numberOfFloors = 5;
     static const int numberOfElevators = 1;
     double epsilon;
-
+    int reward = 0;
     Elevator elevators[numberOfElevators];
     Floor floors[numberOfFloors];
     int actions[numberOfElevators];
@@ -101,7 +101,7 @@ public:
                             e->goalFloors[e->currentFloor] = 0;
 
                             // Add reward
-                            totalReward++;
+                            reward++;
                         } else {
                             it++;
                         }
@@ -162,9 +162,9 @@ public:
 
     int getReward() {
         int reward = 0;
-        for (int i = 0; i < numberOfFloors; i++) {
-            reward -= floors[i].waitingPassengers.size();
-        }
+        //for (int i = 0; i < numberOfFloors; i++) {
+        //    reward -= floors[i].waitingPassengers.size();
+        //}
         return reward;
     }
 

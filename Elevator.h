@@ -14,4 +14,4 @@ struct Elevator {
 };
 
 
-#endif //SECONDPRACTICAL_ELEVATOR_H
+#endif //SECOND PRACTICAL_ELEVATOR_H
