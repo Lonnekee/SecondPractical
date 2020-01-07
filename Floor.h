@@ -7,7 +7,7 @@ using namespace std;
 
 class Floor {
 public:
-    static const int maximumWaiting = 3;
+    static const int maximumWaiting = 4;
     vector<Passenger> waitingPassengers;
 };
 

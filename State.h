@@ -4,6 +4,7 @@
 
 #include "Elevator.h"
 #include "Floor.h"
+#include "Util.h"
 
 using namespace std;
 
@@ -14,9 +15,11 @@ class State {
 private:
     static const int numberOfFloors = 5;
     static const int numberOfElevators = 1;
+    double epsilon;
 
     Elevator elevators[numberOfElevators];
     Floor floors[numberOfFloors];
+    int actions[numberOfElevators];
 
     void updateFloors() {
         for(int i = 0; i < numberOfFloors; i++) {
@@ -37,7 +40,7 @@ private:
 public:
     double totalReward = 0;
 
-    State() {
+    State(double epsilon) : epsilon(epsilon) {
         for (int i = 0; i < numberOfFloors; i++) {
             int numberOfWaiters = rand() % (floors[0].maximumWaiting+1);
             for (int j = 0; j < numberOfWaiters; j++) {
@@ -52,33 +55,49 @@ public:
 
     void giveRewards();
 
-    void performAction(int numberOfElevator){
-        int randomNumber = rand() % 3;
+    bool areFloorsEmpty(){
+        for (int i = 0; i < numberOfFloors; i++) {
+            if (floors[i].waitingPassengers.size() > 0) return false;
+        }
+        return true;
+    }
+
+    int performAction(int numberOfElevator, int optimalAction){
+        default_random_engine generator(getSeed());
+        uniform_real_distribution<double> dist(0.0, 1.0);
+        double ranNum = dist(generator);
+
+        int randomNumber = -1;
+        if (ranNum > epsilon) { // Choose the greedy action
+            randomNumber = optimalAction;
+        } else { // Choose a random action
+            randomNumber = rand() % 3;
+        }
         Elevator *e = &elevators[numberOfElevator];
-        switch(randomNumber){
+        switch(randomNumber) {
             case 0 : // Elevator goes up
-                cout << "Up" << endl;
+//                cout << "Up" << endl;
                 if(e->currentFloor != numberOfFloors-1){
                     e->currentFloor++;
-                    break;
                 }
+                return 0;
             case 1 : // Elevator goes down
-                cout << "Down" << endl;
+//                cout << "Down" << endl;
                 if(e->currentFloor != 0){
                     e->currentFloor--;
-                    break;
                 }
+                return 1;
             case 2 : // Elevator stays at the same floor
-                cout << "Stay" << endl;
+//                cout << "Stay" << endl;
 
                 // Passengers leaving the elevator.
                 if(e->passengers.size() > 0){
                     auto it = e->passengers.begin();
                     while (it != e->passengers.end()) {
                         if (it->goalFloor == e->currentFloor) {
-                            cout << "Passenger size: " << e->passengers.size();
+                            //cout << "Passenger size: " << e->passengers.size();
                             it = e->passengers.erase(it);
-                            cout << " " << e->passengers.size() << endl;
+//                            cout << " " << e->passengers.size() << endl;
                             e->goalFloors[e->currentFloor] = 0;
 
                             // Add reward
@@ -91,19 +110,24 @@ public:
 
                 // Passengers boarding the elevator.
                 while (e->passengers.size() < e->capacity) {
-                    if (floors[e->currentFloor].waitingPassengers.empty()) break;
+                    if (floors[e->currentFloor].waitingPassengers.empty()) return 2;
                     auto p = floors[e->currentFloor].waitingPassengers.back();
                     floors[e->currentFloor].waitingPassengers.pop_back();
                     e->goalFloors[p.goalFloor] = 1;
                     e->passengers.push_back(p);
                 }
+                return 2;
         }
+        cout << "Action: " << randomNumber << endl;
+        exit(24);
     }
-    void updateState() {
+
+    int *updateState(int optimalAction) {
         for(int elevator = 0; elevator < numberOfElevators; elevator++) {
-            performAction(elevator);
+            actions[elevator] = performAction(elevator,optimalAction);
         }
-        updateFloors();
+//        updateFloors();
+        return actions;
     };
     void print() {
         // Print divider
@@ -135,6 +159,17 @@ public:
             }
         }
     }
+
+    int getReward() {
+        int reward = 0;
+        for (int i = 0; i < numberOfFloors; i++) {
+            reward -= floors[i].waitingPassengers.size();
+        }
+        return reward;
+    }
+
+    Elevator *getElevators() { return elevators; }
+    Floor *getFloors() { return floors; }
 };
 
 
