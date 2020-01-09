@@ -5,6 +5,7 @@
 #include "Elevator.h"
 #include "Floor.h"
 #include "Util.h"
+#include "Constants.h"
 
 using namespace std;
 
@@ -13,17 +14,14 @@ static std::mt19937 gen(rd());
 
 class State {
 private:
-    static const int numberOfFloors = 5;
-    static const int numberOfElevators = 1;
     double epsilon;
-
     Elevator elevators[numberOfElevators];
     Floor floors[numberOfFloors];
     int actions[numberOfElevators];
 
     void updateFloors() {
         for(int i = 0; i < numberOfFloors; i++) {
-            int maximum = floors[i].maximumWaiting;
+            int maximum = maximumWaiting;
             int length = floors[i].waitingPassengers.size();
 
             if (length < maximum) {
@@ -38,11 +36,11 @@ private:
     }
 
 public:
-    double totalReward = 0;
+    double reward = 0;
 
     State(double epsilon) : epsilon(epsilon) {
         for (int i = 0; i < numberOfFloors; i++) {
-            int numberOfWaiters = rand() % (floors[0].maximumWaiting+1);
+            int numberOfWaiters = rand() % (maximumWaiting+1);
             for (int j = 0; j < numberOfWaiters; j++) {
                 Passenger p;
                 while (p.goalFloor == i) {
@@ -100,8 +98,8 @@ public:
 //                            cout << " " << e->passengers.size() << endl;
                             e->goalFloors[e->currentFloor] = 0;
 
-                            // Add reward
-                            totalReward++;
+                            // Add reward for every person that arrives at their destination
+                            reward++;
                         } else {
                             it++;
                         }
@@ -109,7 +107,7 @@ public:
                 }
 
                 // Passengers boarding the elevator.
-                while (e->passengers.size() < e->capacity) {
+                while (e->passengers.size() < capacity) {
                     if (floors[e->currentFloor].waitingPassengers.empty()) return 2;
                     auto p = floors[e->currentFloor].waitingPassengers.back();
                     floors[e->currentFloor].waitingPassengers.pop_back();
@@ -123,10 +121,20 @@ public:
     }
 
     int *updateState(int optimalAction) {
+        // Setting the reward of this turn back to zero
+        reward = 0;
+
+        //
         for(int elevator = 0; elevator < numberOfElevators; elevator++) {
             actions[elevator] = performAction(elevator,optimalAction);
         }
 //        updateFloors();
+
+        // Punishing for waiting passengers
+//        for (int i = 0; i < numberOfFloors; i++) {
+//            reward -= floors[i].waitingPassengers.size();
+//        }
+
         return actions;
     };
     void print() {
@@ -160,13 +168,7 @@ public:
         }
     }
 
-    int getReward() {
-        int reward = 0;
-        for (int i = 0; i < numberOfFloors; i++) {
-            reward -= floors[i].waitingPassengers.size();
-        }
-        return reward;
-    }
+    int getReward() { return reward; }
 
     Elevator *getElevators() { return elevators; }
     Floor *getFloors() { return floors; }

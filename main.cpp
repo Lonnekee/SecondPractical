@@ -18,8 +18,7 @@ int main() {
      */
 
 //      To calculate the number of states:
-    int maximumWaiting = 4, numberOfFloors = 5, capacity = 4, numberOfLifts = 1;
-    int numberOfStates = pow(2, numberOfFloors) * pow((numberOfFloors * pow(2, numberOfFloors)), numberOfLifts);
+    int numberOfStates = pow(2, numberOfFloors) * pow((numberOfFloors * pow(2, numberOfFloors)), numberOfElevators);
     cout << "Number of states: " << numberOfStates << endl;
 
     int maxRepetitions = 10000;
@@ -30,9 +29,15 @@ int main() {
     LookupTable lookupTable;
 
     int optimalAction = rand() % 3; // First action
-    int averageEpoch = 0;
+    double averageEpoch = 0.0;
     for (int repetitions = 1; repetitions <= maxRepetitions; repetitions++){
         State s(epsilon);
+
+        int waiting = 0;
+        Floor *floors = s.getFloors();
+        for (int i = 0; i < numberOfFloors; i++) {
+            waiting += floors[i].waitingPassengers.size();
+        }
 //        s.print();
 
         for (int epoch = 1; epoch <= maxEpochs; epoch++) {
@@ -49,8 +54,8 @@ int main() {
 
             // Get the best action to take in this state
             double highestValue = -DBL_MIN;
-            for (int i = 0; i < pow(3, numberOfLifts); i++) {
-                int *possibleActions = new int[numberOfLifts]{i};
+            for (int i = 0; i < pow(3, numberOfElevators); i++) {
+                int *possibleActions = new int[numberOfElevators]{i};
                 unsigned long long key = lookupTable.addActionToKey(possibleActions, newKey);
                 double value = lookupTable.getValue(key);
                 if (value > highestValue) {
@@ -66,27 +71,17 @@ int main() {
                               alpha * (reward + discountFactor * lookupTable.getValue(newKey));
             lookupTable.setValue(oldKey, newValue);
 
-            // Print the new state
-//            s.print();
-            //cout << "Reward: " << reward << endl;
-//            cout << "Average reward: " << s.totalReward / epoch << endl;
-            if(s.areFloorsEmpty() || epoch == maxEpochs  ){
-//                cout << "Epoch: " << epoch << endl;
-                averageEpoch += epoch;
+            // End if there are no waiting people left
+            if(s.areFloorsEmpty() || epoch == maxEpochs){
+                if (waiting != 0) averageEpoch += epoch / waiting;
                 break;
             }
         }
 
         if (repetitions % 100 == 0) {
-            cout << "Average finishing epoch: " << averageEpoch / 100 << endl;
-            averageEpoch = 0;
-
-            //lookupTable.print();
+            cout << "Average finishing epoch per waiting person: " << averageEpoch / 100 << endl;
+            averageEpoch = 0.0;
         }
     }
     return 0;
-}
-
-void getValue(int i) {
-
 }

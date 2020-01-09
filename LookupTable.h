@@ -3,14 +3,13 @@
 
 #include <map>
 #include "State.h"
+#include "Constants.h"
 #include <typeinfo>
 
 using namespace std;
 
 class LookupTable {
 private:
-    static const int numberOfFloors = 5;
-    static const int numberOfElevators = 1;
     map<unsigned long long, double> lookupTable;
 
     void addEntry(unsigned long long key) {
