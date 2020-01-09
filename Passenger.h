@@ -2,9 +2,10 @@
 #define SECONDPRACTICAL_PASSENGER_H
 
 #include <random>
+#include "Constants.h"
 
 struct Passenger {
-    int goalFloor = rand() % 5;
+    int goalFloor = rand() % numberOfFloors;
 };
 
 #endif //SECONDPRACTICAL_PASSENGER_H

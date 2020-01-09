@@ -1,10 +1,11 @@
 #ifndef SECONDPRACTICAL_STATE_H
 #define SECONDPRACTICAL_STATE_H
 
-
 #include "Elevator.h"
 #include "Floor.h"
 #include "Util.h"
+#include "Constants.h"
+#include <float.h>
 
 using namespace std;
 
@@ -13,17 +14,14 @@ static std::mt19937 gen(rd());
 
 class State {
 private:
-    static const int numberOfFloors = 5;
-    static const int numberOfElevators = 1;
     double epsilon;
-    int reward = 0;
     Elevator elevators[numberOfElevators];
     Floor floors[numberOfFloors];
     int actions[numberOfElevators];
 
     void updateFloors() {
         for(int i = 0; i < numberOfFloors; i++) {
-            int maximum = floors[i].maximumWaiting;
+            int maximum = maximumWaiting;
             int length = floors[i].waitingPassengers.size();
 
             if (length < maximum) {
@@ -38,11 +36,11 @@ private:
     }
 
 public:
-    double totalReward = 0;
+    double reward = 0;
 
     State(double epsilon) : epsilon(epsilon) {
         for (int i = 0; i < numberOfFloors; i++) {
-            int numberOfWaiters = rand() % (floors[0].maximumWaiting+1);
+            int numberOfWaiters = rand() % (maximumWaiting+1);
             for (int j = 0; j < numberOfWaiters; j++) {
                 Passenger p;
                 while (p.goalFloor == i) {
@@ -62,19 +60,9 @@ public:
         return true;
     }
 
-    int performAction(int numberOfElevator, int optimalAction){
-        default_random_engine generator(getSeed());
-        uniform_real_distribution<double> dist(0.0, 1.0);
-        double ranNum = dist(generator);
-
-        int randomNumber = -1;
-        if (ranNum > epsilon) { // Choose the greedy action
-            randomNumber = optimalAction;
-        } else { // Choose a random action
-            randomNumber = rand() % 3;
-        }
+    int performAction(int numberOfElevator, int action){
         Elevator *e = &elevators[numberOfElevator];
-        switch(randomNumber) {
+        switch(action) {
             case 0 : // Elevator goes up
 //                cout << "Up" << endl;
                 if(e->currentFloor != numberOfFloors-1){
@@ -100,7 +88,7 @@ public:
 //                            cout << " " << e->passengers.size() << endl;
                             e->goalFloors[e->currentFloor] = 0;
 
-                            // Add reward
+                            // Add reward for every person that arrives at their destination
                             reward++;
                         } else {
                             it++;
@@ -109,7 +97,7 @@ public:
                 }
 
                 // Passengers boarding the elevator.
-                while (e->passengers.size() < e->capacity) {
+                while (e->passengers.size() < capacity) {
                     if (floors[e->currentFloor].waitingPassengers.empty()) return 2;
                     auto p = floors[e->currentFloor].waitingPassengers.back();
                     floors[e->currentFloor].waitingPassengers.pop_back();
@@ -118,15 +106,25 @@ public:
                 }
                 return 2;
         }
-        cout << "Action: " << randomNumber << endl;
+        cout << "Action: " << action << endl;
         exit(24);
     }
 
-    int *updateState(int optimalAction) {
+    int *updateState(int action) {
+        // Setting the reward of this turn back to zero
+        reward = 0;
+
+        // All elevators perform their actions
         for(int elevator = 0; elevator < numberOfElevators; elevator++) {
-            actions[elevator] = performAction(elevator,optimalAction);
+            actions[elevator] = performAction(elevator,action);
         }
 //        updateFloors();
+
+        // Punishing for waiting passengers
+        //for (int i = 0; i < numberOfFloors; i++) {
+        //   reward -= floors[i].waitingPassengers.size();
+        //}
+
         return actions;
     };
     void print() {
@@ -160,21 +158,7 @@ public:
         }
     }
 
-    int getReward() {
-        int reward = 0;
-        //for (int i = 0; i < numberOfFloors; i++) {
-        //    reward -= floors[i].waitingPassengers.size();
-        //}
-        return reward;
-    }
-
-    int getStartingNumberWaiting() {
-        int waiting = 0;
-        for (int i = 0; i < numberOfFloors; i++) {
-            waiting += floors[i].waitingPassengers.size();
-        }
-        return waiting;
-    }
+    int getReward() { return reward; }
 
     Elevator *getElevators() { return elevators; }
     Floor *getFloors() { return floors; }

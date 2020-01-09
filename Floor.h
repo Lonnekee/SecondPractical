@@ -5,9 +5,7 @@
 
 using namespace std;
 
-class Floor {
-public:
-    static const int maximumWaiting = 4;
+struct Floor {
     vector<Passenger> waitingPassengers;
 };
 
