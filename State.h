@@ -168,6 +168,14 @@ public:
         return reward;
     }
 
+    int getStartingNumberWaiting() {
+        int waiting = 0;
+        for (int i = 0; i < numberOfFloors; i++) {
+            waiting += floors[i].waitingPassengers.size();
+        }
+        return waiting;
+    }
+
     Elevator *getElevators() { return elevators; }
     Floor *getFloors() { return floors; }
 };

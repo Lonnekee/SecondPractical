@@ -25,14 +25,18 @@ int main() {
     int maxRepetitions = 100000;
     int maxEpochs = 10000;
     double alpha = 0.05;
-    double discountFactor = 0.5;
-    double epsilon = 0.1;
+    double discountFactor = 0.8;
+    double epsilon = 0.05;
     LookupTable lookupTable;
 
     int optimalAction = rand() % 3; // First action
     int averageEpoch = 0;
+    int startingWaitingNumber = 0;
+    int startingWaitingNumberTotal = 0;
     for (int repetitions = 1; repetitions <= maxRepetitions; repetitions++){
         State s(epsilon);
+        startingWaitingNumber = s.getStartingNumberWaiting();
+
 //        s.print();
 
         for (int epoch = 1; epoch <= maxEpochs; epoch++) {
@@ -77,10 +81,14 @@ int main() {
             }
         }
 
+        startingWaitingNumberTotal += startingWaitingNumber;
+        startingWaitingNumber = 0;
         if (repetitions % 100 == 0) {
-            cout << "Average finishing epoch: " << averageEpoch / 100 << endl;
+            cout << "Starting waiting number: " << startingWaitingNumberTotal << endl;
+            averageEpoch /= startingWaitingNumberTotal;
+            cout << "Average finishing epoch: " << averageEpoch  << endl;
             averageEpoch = 0;
-
+            startingWaitingNumberTotal = 0;
             //lookupTable.print();
         }
     }
