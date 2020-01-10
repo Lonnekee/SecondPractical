@@ -9,28 +9,47 @@ class LookupTable {
 private:
     map<unsigned long long, double> lookupTable;
 
+    int bitsToInt(bool *bits, int length) {
+        int number = 0;
+        for (int i = 0; i < length; i++) {
+            number += pow(2,i) * bits[i];
+        }
+        return number;
+    }
+
     void addEntry(unsigned long long key) {
         int value = rand() % 11 - 5;
         lookupTable.insert(make_pair(key, value));
     }
 public:
+    /**
+     * Converts a state to a key.
+     *
+     * @pre The number of floors is max 9.
+     * @param floors
+     * @param elevators
+     * @return
+     */
     unsigned long long fromStateToKey(Floor *floors, Elevator *elevators) {
-            unsigned long long key = 0;
+            unsigned long long key = 1000;
 
             // Iterate over all floors
+            bool bits[numberOfFloors];
             for (int i = 0; i < numberOfFloors; i++) {
-                key += (floors[i].waitingPassengers.size() != 0) ? 2 : 1;
-                key *= 10;
+                bits[i] = (floors[i].waitingPassengers.size() != 0) ? 1 : 0;
             }
+            key += bitsToInt(bits,numberOfFloors);
+            key *= 10;
 
         // Iterate over all elevators
         for (int i = 0; i < numberOfElevators; i++) {
             key += elevators[i].currentFloor;
+            key *= 1000;
 
             for (int j = 0; j < numberOfFloors; j++) {
-                key *= 10;
-                key += elevators[i].goalFloors[j];
+                bits[j] = elevators[i].goalFloors[j];
             }
+            key += bitsToInt(bits,numberOfFloors);
         }
         return key;
     }

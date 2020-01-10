@@ -20,7 +20,7 @@ int main() {
 //      To calculate the number of states:
     int numberOfStates = pow(2, numberOfFloors) * pow((numberOfFloors * pow(2, numberOfFloors)), numberOfElevators);
     cout << "Number of states: " << numberOfStates << endl;
-    int algorithm = 2; //1 for q learning, 2 for sarsa
+    int algorithm = 1; //1 for q learning, 2 for sarsa
     int maxRepetitions = 100000;
     int maxEpochs = 10000;
     double alpha = 0.05;
