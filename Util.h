@@ -30,7 +30,7 @@ int eGreedyActionSelection(double epsilon, int bestAction) {
     if (ranNum > epsilon) { // Choose the greedy action
         return bestAction;
     } else { // Choose a random action
-        return rand() % 3;
+        return (rand() % 3);
     }
 }
 

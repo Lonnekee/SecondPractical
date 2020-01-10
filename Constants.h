@@ -1,9 +1,9 @@
 #ifndef SECONDPRACTICAL_CONSTANTS_H
 #define SECONDPRACTICAL_CONSTANTS_H
 
-inline static const int numberOfFloors = 4;
-inline static const int numberOfElevators = 1;
-inline static const int maximumWaiting = 4;
-inline static const int capacity = 4;
+static const int numberOfFloors = 7;
+static const int numberOfElevators = 1;
+static const int maximumWaiting = 3;
+static const int capacity = 2;
 
 #endif //SECONDPRACTICAL_CONSTANTS_H

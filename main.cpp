@@ -17,15 +17,15 @@ int main() {
      * - 819200: int maximumWaiting = 4, numberOfFloors = 5, capacity = 4, numberOfLifts = 2;
      */
 
-//      To calculate the number of states:
+    // To calculate the number of states:
     int numberOfStates = pow(2, numberOfFloors) * pow((numberOfFloors * pow(2, numberOfFloors)), numberOfElevators);
     cout << "Number of states: " << numberOfStates << endl;
     int algorithm = 2; //1 for q learning, 2 for sarsa
-    int maxRepetitions = 100000;
+    int maxRepetitions = 1000000;
     int maxEpochs = 10000;
     double alpha = 0.05;
-    double discountFactor = 0.5;
-    double epsilon = 0.1;
+    double discountFactor = 0.99;
+    double epsilon = 0.2;
     LookupTable lookupTable;
 
     double averageEpoch = 0.0;
@@ -49,6 +49,7 @@ int main() {
                 unsigned long long newKey = lookupTable.fromStateToKey(s.getFloors(), s.getElevators());
 
                 oldKey = lookupTable.addActionToKey(action, oldKey);
+
                 int reward = 0;
 
                 // Get the best action to take in this state
@@ -69,13 +70,25 @@ int main() {
                 action = eGreedyActionSelection(epsilon, optimalAction);
 
                 // End if there are no waiting people left
-                if (s.areFloorsEmpty() || epoch == maxEpochs) {
+                if ((s.areFloorsEmpty() && s.getElevators()->passengers.empty()) || epoch == maxEpochs) {
                     double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
                                       alpha * (1 + discountFactor * lookupTable.getValue(newKey));
                     lookupTable.setValue(oldKey, newValue);
                     if (waiting != 0) averageEpoch += epoch / waiting;
                     break;
                 }
+                /*
+                if(repetitions == maxRepetitions-1){
+                    epsilon = 0;
+                    waiting = 0;
+                    for (int i = 0; i < numberOfFloors; i++) {
+                        waiting += floors[i].waitingPassengers.size();
+                    }
+                    if(waiting <= 6){
+                        s.print();
+                    }
+                }
+                 */
                 // Update lookupTable
                 double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
                                   alpha * (reward + discountFactor * lookupTable.getValue(newKey));
@@ -95,7 +108,6 @@ int main() {
             State s(epsilon);
             int action = rand() % 3;
             int actionNew = action;
-
             int waiting = 0;
             Floor *floors = s.getFloors();
             for (int i = 0; i < numberOfFloors; i++) {
@@ -124,8 +136,9 @@ int main() {
             // Main loop
             for (int epoch = 1; epoch <= maxEpochs; epoch++) {
                 s.updateState(action);
-                //int reward = s.getReward();
                 unsigned long long newKey = lookupTable.fromStateToKey(s.getFloors(), s.getElevators());
+
+                int reward = 0;
 
                 // Get the best action to take in this state
                 optimalAction = 0;
@@ -144,21 +157,32 @@ int main() {
                 newKey += actionNew;
 
                 // Update lookupTable
-                double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
+                double newValue = lookupTable.getValue(oldKey) +
                                   alpha * (0 + (discountFactor * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
                 lookupTable.setValue(oldKey, newValue);
-
                 action = actionNew;
                 oldKey = newKey;
 
                 // End if there are no waiting people left
-                if (s.areFloorsEmpty() || epoch == maxEpochs) {
-                    double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
+                if ((s.areFloorsEmpty() && s.getElevators()->passengers.empty()) || epoch == maxEpochs) {
+                    double newValue = lookupTable.getValue(oldKey) +
                                       alpha * (1 + (discountFactor * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
                     lookupTable.setValue(oldKey, newValue);
                     if (waiting != 0) averageEpoch += epoch / waiting;
                     break;
                 }
+/*
+                if(repetitions == maxRepetitions-1){
+                    epsilon = 0;
+                    waiting = 0;
+                    for (int i = 0; i < numberOfFloors; i++) {
+                        waiting += floors[i].waitingPassengers.size();
+                    }
+                    if(waiting <= 6){
+                        s.print();
+                    }
+                }
+                */
             }
 
             // Print results
@@ -168,5 +192,6 @@ int main() {
             }
         }
     }
+    cout << "Entries in lookup table: " << lookupTable.printAmountOfEntries() << endl;
     return 0;
 }

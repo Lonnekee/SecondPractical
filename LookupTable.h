@@ -60,11 +60,13 @@ public:
         }
     }
 
-    void print() {
-        for(auto it = lookupTable.cbegin(); it != lookupTable.cend(); ++it)
-        {
-            cout << it->first << " " << it->second << endl;
+    int printAmountOfEntries() {
+        int amount = 0;
+        for(auto it = lookupTable.cbegin(); it != lookupTable.cend(); ++it) {
+            //cout << it->first << " " << it->second << endl;
+            amount++;
         }
+        return amount;
     }
 };
 
