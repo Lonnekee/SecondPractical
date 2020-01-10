@@ -1,6 +1,7 @@
 #ifndef SECONDPRACTICAL_UTIL_H
 #define SECONDPRACTICAL_UTIL_H
 
+#include <fstream>
 #include "LookupTable.h"
 #include "float.h"
 
@@ -32,6 +33,21 @@ int eGreedyActionSelection(double epsilon, int bestAction) {
     } else { // Choose a random action
         return rand() % 3;
     }
+}
+
+void printToFile(string filename, int epochs, double *results) {
+    cout << "Writing to file..." << endl;
+    ofstream myfile ("results/" + filename + ".csv");
+    if (myfile.is_open())
+    {
+        myfile << "epoch, result\n";
+        for(int index = 0; index < epochs; index ++){
+            myfile << index+1 << "," << results[index] << "\n";
+        }
+        myfile.close();
+        cout << "Done." << endl;
+    }
+    else cout << "Unable to open file";
 }
 
 #endif //SECONDPRACTICAL_UTIL_H
