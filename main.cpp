@@ -24,6 +24,7 @@ int main() {
     int maxRepetitions = 100000;
     int maxEpochs = 10000;
     LookupTable lookupTable;
+    double results[maxRepetitions/100];
 
     double averageEpoch = 0.0;
 
@@ -74,18 +75,6 @@ int main() {
                     if (waiting != 0) averageEpoch += epoch / waiting;
                     break;
                 }
-                /*
-                if(repetitions == maxRepetitions-1){
-                    epsilon = 0;
-                    waiting = 0;
-                    for (int i = 0; i < numberOfFloors; i++) {
-                        waiting += floors[i].waitingPassengers.size();
-                    }
-                    if(waiting <= 6){
-                        s.print();
-                    }
-                }
-                 */
                 // Update lookupTable
                 double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
                                   alpha * (reward + gamma * lookupTable.getValue(newKey));
@@ -96,6 +85,7 @@ int main() {
 
             // Print results
             if (repetitions % 100 == 0) {
+                results[repetitions/100 -1] = averageEpoch / 100;
                 cout << "Average finishing epoch per waiting person: " << averageEpoch / 100 << endl;
                 averageEpoch = 0.0;
             }
@@ -134,7 +124,6 @@ int main() {
             // Main loop
             for (int epoch = 1; epoch <= maxEpochs; epoch++) {
                 s.updateState(action);
-                //int reward = s.getReward();
                 unsigned long long newKey = lookupTable.fromStateToKey(s.getFloors(), s.getElevators());
 
                 int reward = 0;
@@ -157,7 +146,7 @@ int main() {
 
                 // Update lookupTable
                 double newValue = lookupTable.getValue(oldKey) +
-                                  alpha * (0 + (discountFactor * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
+                                  alpha * (0 + (gamma * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
                 lookupTable.setValue(oldKey, newValue);
 
                 action = actionNew;
@@ -178,8 +167,9 @@ int main() {
                     for (int i = 0; i < numberOfFloors; i++) {
                         waiting += floors[i].waitingPassengers.size();
                     }
-                    if(waiting <= 6){
-                        s.print();
+                    if(waiting <= 4){
+                        counter++;
+                        s.print(action,counter);
                     }
                 }
                 */
@@ -187,11 +177,13 @@ int main() {
 
             // Print results
             if (repetitions % 100 == 0) {
+                results[repetitions/100 - 1] = averageEpoch/100;
                 cout << "Average finishing epoch per waiting person: " << averageEpoch / 100 << endl;
                 averageEpoch = 0.0;
             }
         }
     }
     cout << "Entries in lookup table: " << lookupTable.printAmountOfEntries() << endl;
+    //printToFile("Qlearning8-6Opt", maxEpochs, results);
     return 0;
 }

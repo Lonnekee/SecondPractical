@@ -64,19 +64,19 @@ public:
         Elevator *e = &elevators[numberOfElevator];
         switch(action) {
             case 0 : // Elevator goes up
-//                cout << "Up" << endl;
+                //cout << "Up" << endl;
                 if(e->currentFloor != numberOfFloors-1){
                     e->currentFloor++;
                 }
                 return 0;
             case 1 : // Elevator goes down
-//                cout << "Down" << endl;
+                //cout << "Down" << endl;
                 if(e->currentFloor != 0){
                     e->currentFloor--;
                 }
                 return 1;
             case 2 : // Elevator stays at the same floor
-//                cout << "Stay" << endl;
+                //cout << "Stay" << endl;
 
                 // Passengers leaving the elevator.
                 if(e->passengers.size() > 0){
@@ -87,9 +87,6 @@ public:
                             it = e->passengers.erase(it);
 //                            cout << " " << e->passengers.size() << endl;
                             e->goalFloors[e->currentFloor] = 0;
-
-                            // Add reward for every person that arrives at their destination
-                            reward++;
                         } else {
                             it++;
                         }
@@ -118,23 +115,14 @@ public:
         for(int elevator = 0; elevator < numberOfElevators; elevator++) {
             actions[elevator] = performAction(elevator,action);
         }
-//        updateFloors();
-
-        // Punishing for waiting passengers
-        //for (int i = 0; i < numberOfFloors; i++) {
-        //   reward -= floors[i].waitingPassengers.size();
-        //}
-
         return actions;
     };
     void print() {
         // Print divider
-        cout << "---------------------";
+        cout << "-------------------" << endl;
         for (int i= 0; i < numberOfElevators; i++) {
-            cout << "---------------------";
+            cout << "-------------------" << endl;
         }
-        cout << endl;
-
         // Print the rest
         for(int i = numberOfFloors-1; i>=0; i--) {
             cout << "         ";

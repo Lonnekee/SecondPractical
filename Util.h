@@ -36,12 +36,14 @@ int eGreedyActionSelection(double epsilon, int bestAction) {
 }
 
 void printToFile(string filename, int epochs, double *results) {
+    double limit = 0.0000005;
     cout << "Writing to file..." << endl;
     ofstream myfile ("results/" + filename + ".csv");
     if (myfile.is_open())
     {
         myfile << "epoch, result\n";
         for(int index = 0; index < epochs; index ++){
+            if(results[index] < limit){break;}
             myfile << index+1 << "," << results[index] << "\n";
         }
         myfile.close();
