@@ -23,9 +23,6 @@ int main() {
     int algorithm = 1; //1 for q learning, 2 for sarsa
     int maxRepetitions = 100000;
     int maxEpochs = 10000;
-    double alpha = 0.05;
-    double discountFactor = 0.5;
-    double epsilon = 0.1;
     LookupTable lookupTable;
 
     double averageEpoch = 0.0;
@@ -33,6 +30,7 @@ int main() {
     if(algorithm == 1) {
         for (int repetitions = 1; repetitions <= maxRepetitions; repetitions++) {
             State s(epsilon);
+            s.print();
             int action = rand() % 3;
             int waiting = 0;
             Floor *floors = s.getFloors();
@@ -71,14 +69,14 @@ int main() {
                 // End if there are no waiting people left
                 if (s.areFloorsEmpty() || epoch == maxEpochs) {
                     double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
-                                      alpha * (1 + discountFactor * lookupTable.getValue(newKey));
+                                      alpha * (1 + gamma * lookupTable.getValue(newKey));
                     lookupTable.setValue(oldKey, newValue);
                     if (waiting != 0) averageEpoch += epoch / waiting;
                     break;
                 }
                 // Update lookupTable
                 double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
-                                  alpha * (reward + discountFactor * lookupTable.getValue(newKey));
+                                  alpha * (reward + gamma * lookupTable.getValue(newKey));
                 lookupTable.setValue(oldKey, newValue);
 
 
@@ -145,7 +143,7 @@ int main() {
 
                 // Update lookupTable
                 double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
-                                  alpha * (0 + (discountFactor * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
+                                  alpha * (0 + (gamma * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
                 lookupTable.setValue(oldKey, newValue);
 
                 action = actionNew;
@@ -154,7 +152,7 @@ int main() {
                 // End if there are no waiting people left
                 if (s.areFloorsEmpty() || epoch == maxEpochs) {
                     double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
-                                      alpha * (1 + (discountFactor * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
+                                      alpha * (1 + (gamma * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
                     lookupTable.setValue(oldKey, newValue);
                     if (waiting != 0) averageEpoch += epoch / waiting;
                     break;
