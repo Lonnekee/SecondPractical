@@ -30,6 +30,7 @@ public:
      * @param elevators
      * @return
      */
+
     unsigned long long fromStateToKey(Floor *floors, Elevator *elevators) {
             unsigned long long key = 1000;
 
