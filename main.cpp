@@ -167,7 +167,7 @@ int main() {
                     newKey += actionNew;
 
                     // Update lookupTable
-                    double newValue = lookupTable.getValue(oldKey) +
+                    double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
                                       alpha *
                                       (0 + (gamma * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
                     lookupTable.setValue(oldKey, newValue);
@@ -176,7 +176,7 @@ int main() {
                     oldKey = newKey;
 
                     // End if there are no waiting people left
-                    if (s.areFloorsEmpty() || epoch == maxEpochs) {
+                    if ((s.areFloorsEmpty() && s.getElevators()->passengers.empty()) || epoch == maxEpochs) {
                         double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
                                           alpha *
                                           (1 + (gamma * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
