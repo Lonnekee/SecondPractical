@@ -24,14 +24,17 @@ int main() {
     // To calculate the number of states:
     int numberOfStates = pow(2, numberOfFloors) * pow((numberOfFloors * pow(2, numberOfFloors)), numberOfElevators);
     cout << "Number of states: " << numberOfStates << endl;
-    double alpha = 0;
+    double gamma = 0;
 
-    ofstream myfile("Parameter Sweep/SarsaAlphaTwee");
+    ofstream myfile("Parameter Sweep/SarsaEpsilonSecond");
     myfile << "Number of floors: " << numberOfFloors << " maximum waiting: " << maximumWaiting << endl;
-    myfile << "Epsilon: " << epsilon << endl;
-    myfile << "Gamma: " << gamma << endl;
+    myfile << "(optimized) Alpha: " << alpha << endl;
+    myfile << "(optimized) epsilon: " << epsilon << endl;
 
-    for (alpha = 0.38; alpha < 0.7; alpha += 0.1) {
+    for(gamma = 0.01; gamma < 1; gamma += 0.1) {
+        if(gamma == 1.01){
+            gamma == 0.99;
+        }
         double totalValue = 0;
         int algorithm = 2; //1 for q learning, 2 for sarsa
         int maxRepetitions = 100000;
@@ -166,10 +169,9 @@ int main() {
                     newKey *= 10;
                     newKey += actionNew;
 
-                    // Update lookupTable
-                    double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
-                                      alpha *
-                                      (0 + (gamma * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
+                    // Update lookupTable with a reward of 0 because it is not the final state
+                    double newValue = (1-alpha) * lookupTable.getValue(oldKey) +
+                                      alpha * (0 + (gamma * (lookupTable.getValue(newKey))));
                     lookupTable.setValue(oldKey, newValue);
 
                     action = actionNew;
@@ -177,9 +179,9 @@ int main() {
 
                     // End if there are no waiting people left
                     if ((s.areFloorsEmpty() && s.getElevators()->passengers.empty()) || epoch == maxEpochs) {
-                        double newValue = (1 - alpha) * lookupTable.getValue(oldKey) +
-                                          alpha *
-                                          (1 + (gamma * (lookupTable.getValue(newKey))) - lookupTable.getValue(oldKey));
+                        //If it is the final state, give a reward of 1 and update the lookup table
+                        double newValue = (1-alpha) * lookupTable.getValue(oldKey) +
+                                          alpha * (1 + (gamma * (lookupTable.getValue(newKey))));
                         lookupTable.setValue(oldKey, newValue);
                         if (waiting != 0) averageEpoch += epoch / waiting;
                         break;
@@ -189,7 +191,7 @@ int main() {
                 //Print results
                 if (repetitions % 100 == 0) {
                     results[repetitions / 100 - 1] = averageEpoch / 100;
-                    cout << "Average finishing epoch per waiting person: " << averageEpoch / 100 << endl;
+                    //cout << "Average finishing epoch per waiting person: " << averageEpoch / 100 << endl;
                     averageEpoch = 0.0;
                 }
 
@@ -204,19 +206,19 @@ int main() {
             }
         }
         if(totalValue == -1){
-            myfile << "With alpha = " << alpha << ", the program took more than 3 minutes and was terminated." << endl;
+            myfile << "With epsilon = " << epsilon << ", the program took more than 3 minutes and was terminated." << endl;
         }
             totalValue = 0;
             for (int i = (maxRepetitions / 100) - 100; i < (maxRepetitions / 100); i++) {
                 totalValue += results[i];
             }
-            cout << "Alpha: " << alpha << " with the average of last 100 reps: " << totalValue / 100 << endl;
+            cout << "Epsilon: " << epsilon << " with the average of last 100 reps: " << totalValue / 100 << endl;
             auto end = std::chrono::system_clock::now();
             std::chrono::duration<double> elapsed_seconds = end - start;
             std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 
             if (myfile.is_open()) {
-                myfile << "With alpha = " << alpha << ", performance = " << totalValue / 100 << " and elapsed time: " << elapsed_seconds.count() << endl;
+                myfile << "With epsilon = " << epsilon << ", performance = " << totalValue / 100 << " and elapsed time: " << elapsed_seconds.count() << endl;
             } else cout << "Unable to open file";
 
     }
