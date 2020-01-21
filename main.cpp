@@ -24,17 +24,14 @@ int main() {
     // To calculate the number of states:
     int numberOfStates = pow(2, numberOfFloors) * pow((numberOfFloors * pow(2, numberOfFloors)), numberOfElevators);
     cout << "Number of states: " << numberOfStates << endl;
-    double gamma = 0;
+    double epsilon = 0;
 
     ofstream myfile("Parameter Sweep/SarsaEpsilonSecond");
     myfile << "Number of floors: " << numberOfFloors << " maximum waiting: " << maximumWaiting << endl;
     myfile << "(optimized) Alpha: " << alpha << endl;
-    myfile << "(optimized) epsilon: " << epsilon << endl;
+    myfile << "Gamma: " << gamma << endl;
 
-    for(gamma = 0.01; gamma < 1; gamma += 0.1) {
-        if(gamma == 1.01){
-            gamma == 0.99;
-        }
+    for(epsilon = 0.225; epsilon < 0.25; epsilon += 0.005) {
         double totalValue = 0;
         int algorithm = 2; //1 for q learning, 2 for sarsa
         int maxRepetitions = 100000;
