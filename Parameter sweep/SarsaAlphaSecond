@@ -1,0 +1,14 @@
+Number of floors: 6 maximum waiting: 4
+Epsilon: 0.3
+Gamma: 0.99
+With alpha = 0.1, performance = 6.349 and elapsed time: 156.03
+With alpha = 0.11, performance = 6.1199 and elapsed time: 163.197
+With alpha = 0.12, performance = 6.2199 and elapsed time: 135.772
+With alpha = 0.13, performance = 6.3564 and elapsed time: 140.319
+With alpha = 0.14, performance = 6.0575 and elapsed time: 138.203
+With alpha = 0.15, performance = 6.1043 and elapsed time: 103.627
+With alpha = 0.16, performance = 6.136 and elapsed time: 119.292
+With alpha = 0.17, performance = 6.1302 and elapsed time: 114.98
+With alpha = 0.18, performance = 6.0829 and elapsed time: 106.776
+With alpha = 0.19, performance = 6.0125 and elapsed time: 123.653
+

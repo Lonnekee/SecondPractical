@@ -1,0 +1,24 @@
+Number of floors: 6 maximum waiting: 4
+(optimized) Alpha: 0.19
+(optimized) epsilon: 0.215
+With gamma = 0.01, the program took more than 3 minutes and was terminated.
+With gamma = 0.01, performance = 0.0043 and elapsed time: 180.013
+With gamma = 0.09, the program took more than 3 minutes and was terminated.
+With gamma = 0.09, performance = 0.0043 and elapsed time: 269.834
+With gamma = 0.19, the program took more than 3 minutes and was terminated.
+With gamma = 0.19, performance = 0.0043 and elapsed time: 271.279
+With gamma = 0.29, the program took more than 3 minutes and was terminated.
+With gamma = 0.29, performance = 0.0043 and elapsed time: 264.136
+With gamma = 0.39, the program took more than 3 minutes and was terminated.
+With gamma = 0.39, performance = 0.0043 and elapsed time: 266.813
+With gamma = 0.49, the program took more than 3 minutes and was terminated.
+With gamma = 0.49, performance = 0.0043 and elapsed time: 264.676
+With gamma = 0.59, the program took more than 3 minutes and was terminated.
+With gamma = 0.59, performance = 0.0043 and elapsed time: 266.981
+With gamma = 0.69, the program took more than 3 minutes and was terminated.
+With gamma = 0.69, performance = 0.0043 and elapsed time: 274.899
+With gamma = 0.79, the program took more than 3 minutes and was terminated.
+With gamma = 0.79, performance = 0.0043 and elapsed time: 256.21
+With gamma = 0.89, the program took more than 3 minutes and was terminated.
+With gamma = 0.89, performance = 0.0043 and elapsed time: 243.62
+With gamma = 0.99, performance = 5.8738 and elapsed time: 163.899

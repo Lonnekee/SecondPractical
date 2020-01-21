@@ -1,0 +1,17 @@
+Number of floors: 6 maximum waiting: 4
+(optimized) Alpha: 0.19
+Gamma: 0.99
+With epsilon = 0.05, the program took more than 3 minutes and was terminated.
+With epsilon = 0.05, performance = 0.0198 and elapsed time: 284.071
+With epsilon = 0.1, the program took more than 3 minutes and was terminated.
+With epsilon = 0.1, performance = 0.0198 and elapsed time: 254.738
+With epsilon = 0.15, the program took more than 3 minutes and was terminated.
+With epsilon = 0.15, performance = 0.0198 and elapsed time: 180.004
+With epsilon = 0.2, performance = 5.7653 and elapsed time: 170.674
+With epsilon = 0.25, performance = 5.793 and elapsed time: 174.657
+With epsilon = 0.3, performance = 6.0881 and elapsed time: 96.8088
+With epsilon = 0.35, performance = 6.3252 and elapsed time: 92.2917
+With epsilon = 0.4, performance = 6.7641 and elapsed time: 85.9896
+With epsilon = 0.45, performance = 6.9621 and elapsed time: 70.795
+With epsilon = 0.5, performance = 7.4585 and elapsed time: 62.6569
+With epsilon = 0.55, performance = 7.9458 and elapsed time: 58.9392
