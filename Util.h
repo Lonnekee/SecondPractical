@@ -8,6 +8,14 @@
 int seed = 0; // TODO
 int getSeed() { return seed++; }
 
+int bitsToInt(bool *bits, int length) {
+    int number = 0;
+    for (int i = 0; i < length; i++) {
+        number += pow(2,i) * bits[i];
+    }
+    return number;
+}
+
 int getBestAction(LookupTable lookupTable, unsigned long long newKey) {
     int optimalAction = 0;
     double highestValue = -DBL_MIN;

@@ -2,6 +2,7 @@
 #define SECONDPRACTICAL_LOOKUPTABLE_H
 
 #include <map>
+#include <cfloat>
 
 using namespace std;
 
@@ -9,50 +10,26 @@ class LookupTable {
 private:
     map<unsigned long long, double> lookupTable;
 
-    int bitsToInt(bool *bits, int length) {
-        int number = 0;
-        for (int i = 0; i < length; i++) {
-            number += pow(2,i) * bits[i];
-        }
-        return number;
-    }
-
     void addEntry(unsigned long long key) {
         int value = rand() % 11 - 5;
         lookupTable.insert(make_pair(key, value));
     }
 public:
-    /**
-     * Converts a state to a key.
-     *
-     * @pre The number of floors is max 9.
-     * @param floors
-     * @param elevators
-     * @return
-     */
+    int getOptimalAction(unsigned long long key) {
+        int optimalAction = 0;
+        double highestValue = -DBL_MIN;
 
-    unsigned long long fromStateToKey(Floor *floors, Elevator *elevators) {
-            unsigned long long key = 1000;
-
-            // Iterate over all floors
-            bool bits[numberOfFloors];
-            for (int i = 0; i < numberOfFloors; i++) {
-                bits[i] = (floors[i].waitingPassengers.size() != 0) ? 1 : 0;
+        for (int i = 0; i < pow(3, numberOfElevators); i++) {
+            int *possibleActions = new int[numberOfElevators]{i};
+            unsigned long long actionKey = addActionToKey(possibleActions[0], key);
+            double value = getValue(actionKey);
+            if (value > highestValue) {
+                highestValue = value;
+                optimalAction = i;
             }
-            key += bitsToInt(bits,numberOfFloors);
-            key *= 10;
-
-        // Iterate over all elevators
-        for (int i = 0; i < numberOfElevators; i++) {
-            key += elevators[i].currentFloor;
-            key *= 1000;
-
-            for (int j = 0; j < numberOfFloors; j++) {
-                bits[j] = elevators[i].goalFloors[j];
-            }
-            key += bitsToInt(bits,numberOfFloors);
         }
-        return key;
+
+        return optimalAction;
     }
 
     unsigned long long addActionToKey(int action, unsigned long long key) {

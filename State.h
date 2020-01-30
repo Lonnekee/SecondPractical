@@ -6,6 +6,7 @@
 #include "Util.h"
 #include "Constants.h"
 #include <float.h>
+#include <iostream>
 
 using namespace std;
 
@@ -14,7 +15,6 @@ static std::mt19937 gen(rd());
 
 class State {
 private:
-    double epsilon;
     Elevator elevators[numberOfElevators];
     Floor floors[numberOfFloors];
     int actions[numberOfElevators];
@@ -36,9 +36,7 @@ private:
     }
 
 public:
-    double reward = 0;
-
-    State(double epsilon) : epsilon(epsilon) {
+    State() {
         for (int i = 0; i < numberOfFloors; i++) {
             int numberOfWaiters = rand() % (maximumWaiting+1);
             for (int j = 0; j < numberOfWaiters; j++) {
@@ -51,11 +49,39 @@ public:
         }
     }
 
-    void giveRewards();
+    unsigned long long toKey() {
+        unsigned long long key = 1000;
 
-    bool areFloorsEmpty(){
+        // Iterate over all floors
+        bool bits[numberOfFloors];
+        for (int i = 0; i < numberOfFloors; i++) {
+            bits[i] = (floors[i].waitingPassengers.size() != 0) ? 1 : 0;
+        }
+        key += bitsToInt(bits,numberOfFloors);
+        key *= 10;
+
+        // Iterate over all elevators
+        for (int i = 0; i < numberOfElevators; i++) {
+            key += elevators[i].currentFloor;
+            key *= 1000;
+
+            for (int j = 0; j < numberOfFloors; j++) {
+                bits[j] = elevators[i].goalFloors[j];
+            }
+            key += bitsToInt(bits,numberOfFloors);
+        }
+        return key;
+    }
+
+    bool isTerminal(){
+        // Are all floors empty
         for (int i = 0; i < numberOfFloors; i++) {
             if (floors[i].waitingPassengers.size() > 0) return false;
+        }
+
+        // Are all elevators empty
+        for (int i = 0; i < numberOfElevators; i++) {
+            if (elevators[i].passengers.size() > 0) return false;
         }
         return true;
     }
@@ -108,9 +134,6 @@ public:
     }
 
     int *updateState(int action) {
-        // Setting the reward of this turn back to zero
-        reward = 0;
-
         // All elevators perform their actions
         for(int elevator = 0; elevator < numberOfElevators; elevator++) {
             actions[elevator] = performAction(elevator,action);
@@ -146,7 +169,22 @@ public:
         }
     }
 
-    int getReward() { return reward; }
+    int getReward() {
+        if (rewardSystem == 1) {
+            return isTerminal();
+        } else if (rewardSystem == 2) {
+            int people = 0;
+            for (int i = 0; i < numberOfFloors; i++) {
+                people += floors[i].waitingPassengers.size();
+            }
+            for (int i = 0; i < numberOfElevators; i++) {
+                people += elevators[i].passengers.size();
+            }
+            return -people;
+        } else {
+            cerr << "Reward system not recognized." << endl;
+        }
+    }
 
     Elevator *getElevators() { return elevators; }
     Floor *getFloors() { return floors; }
