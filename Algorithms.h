@@ -23,8 +23,8 @@ private:
         }
     }
 
-    void addToAverageEpoch(int epoch) {
-        averageEpoch += ((double) epoch - averageEpoch)/(double) ++n;
+    void addToAverageEpoch(double epochPerWaiting) {
+        averageEpoch += (epochPerWaiting - averageEpoch)/(double) ++n;
     }
 
     void resetAverageEpoch() {
@@ -58,7 +58,7 @@ public:
     void runQlearning(int maxRepetitions, int maxEpochs, LookupTable lookupTable) {
         std::cout << "Running Q-learning..." << endl;
 
-        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\qlearning.csv");
+        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\qlearning5.csv");
 
         if (myfile.is_open()) {
             myfile << "Average finishing epoch per waiting person\n";
@@ -89,7 +89,7 @@ public:
 
                 // End if there are no waiting people left
                 if (s.isTerminal() || epoch == maxEpochs) {
-                    if (waiting != 0) addToAverageEpoch(epoch);
+                    if (waiting != 0) addToAverageEpoch(epoch/(double)waiting);
                     break;
                 }
             }
@@ -115,7 +115,7 @@ public:
     void runSarsa(int maxRepetitions, int maxEpochs, LookupTable lookupTable) {
         std::cout << "Running SARSA..." << endl;
 
-        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\sarsa.csv");
+        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\sarsa5.csv");
 
         if (myfile.is_open()) {
             myfile << "Average finishing epoch per waiting person\n";
@@ -152,7 +152,7 @@ public:
 
                 // End if there are no waiting people left
                 if (s.isTerminal() || epoch == maxEpochs) {
-                    if (waiting != 0) addToAverageEpoch(epoch);
+                    if (waiting != 0) addToAverageEpoch(epoch/(double)waiting);
                     break;
                 }
             }
@@ -177,6 +177,13 @@ public:
 
     void runNormal(int maxRepetitions, int maxEpochs) {
         cout << "Running normal elevator..." << endl;
+
+        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\normal5.csv");
+
+        if (myfile.is_open()) {
+            myfile << "Average finishing epoch per waiting person\n";
+        }
+        else cout << "Unable to open file1";
 
         for (int repetition = 1; repetition <= maxRepetitions; repetition++) {
             initialise();
@@ -222,17 +229,27 @@ public:
 
                 // End if there are no waiting people left
                 if (s.isTerminal() || epoch == maxEpochs) {
-                    if (waiting != 0) addToAverageEpoch(epoch);
+                    if (waiting != 0) addToAverageEpoch(epoch/(double)waiting);
                     break;
                 }
             }
 
             if (repetition % 100 == 0) {
-                cout << "Average finishing epoch per waiting person: " << averageEpoch << endl;
+                cout << ((double) repetition)/maxRepetitions*100 << "%" << endl;
+
+                if (myfile.is_open()) {
+                    myfile << averageEpoch << "\n";
+                }
+                else cout << "Unable to open file2";
 
                 resetAverageEpoch();
             }
         }
+
+        if (myfile.is_open()) {
+            myfile.close();
+        }
+        else cout << "Unable to open file3";
     }
 };
 

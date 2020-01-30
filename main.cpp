@@ -1,15 +1,9 @@
 #include <iostream>
 #include "Elevator.h"
-#include "Floor.h"
-#include "State.h"
 #include "LookupTable.h"
-#include "Util.h"
 #include "Algorithms.h"
 #include <math.h>
-#include <iostream>
-#include <chrono>
-#include <ctime>
-#include <limits>
+#include "Plot.h"
 
 
 using namespace std;
@@ -28,10 +22,12 @@ int main() {
         cin >> algorithm;
     }
 
-    int maxRepetitions = 7000;
+    int maxRepetitions = 20000;
     int maxEpochs = 10000;
     LookupTable lookupTable;
     Algorithms td;
+
+    plot();
 
     if (algorithm == 1) { // Q-learning
         alpha = 0.12;

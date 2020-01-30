@@ -11,7 +11,7 @@ private:
     map<unsigned int, double> lookupTable;
 
     void addEntry(unsigned int key) {
-        int value = rand() % 11 - 5;
+        double value = 0.0;
         lookupTable.insert(make_pair(key, value));
     }
 public:

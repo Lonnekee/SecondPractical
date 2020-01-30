@@ -2,9 +2,7 @@
 #define SECONDPRACTICAL_PLOT_H
 
 #include <vector>
-#include <iostream>
-#include <fstream>
-
+#include "gnuplot-iostream/gnuplot-iostream.h"
 
 void plot() {
     Gnuplot gp;
