@@ -9,6 +9,7 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
+#include <limits>
 
 
 using namespace std;
@@ -27,7 +28,7 @@ int main() {
         cin >> algorithm;
     }
 
-    int maxRepetitions = 60000;
+    int maxRepetitions = 7000;
     int maxEpochs = 10000;
     LookupTable lookupTable;
     Algorithms td;
@@ -39,7 +40,7 @@ int main() {
         td.runQlearning(maxRepetitions, maxEpochs, lookupTable);
     } else if (algorithm == 2) { // SARSA
         alpha = 0.19;
-        epsilon = 0.2;
+        epsilon = 0.3;
         gamma = 0.99;
         td.runSarsa(maxRepetitions, maxEpochs, lookupTable);
     } else if (algorithm == 3) {

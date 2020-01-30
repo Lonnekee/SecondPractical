@@ -58,12 +58,19 @@ public:
     void runQlearning(int maxRepetitions, int maxEpochs, LookupTable lookupTable) {
         std::cout << "Running Q-learning..." << endl;
 
+        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\qlearning.csv");
+
+        if (myfile.is_open()) {
+            myfile << "Average finishing epoch per waiting person\n";
+        }
+        else cout << "Unable to open file1";
+
         for (int repetition = 1; repetition <= maxRepetitions; repetition++) {
             initialise();
             for (int epoch = 1; epoch <= maxEpochs; epoch++) {
-                unsigned long long oldKey = s.toKey();
+                unsigned int oldKey = s.toKey();
                 s.updateState(action); // Take the action
-                unsigned long long newKey = s.toKey();
+                unsigned int newKey = s.toKey();
 
                 oldKey = lookupTable.addActionToKey(action, oldKey);
 
@@ -88,18 +95,36 @@ public:
             }
 
             if (repetition % 100 == 0) {
-                cout << "Average finishing epoch per waiting person: " << averageEpoch << endl;
+                cout << ((double) repetition)/maxRepetitions*100 << "%" << endl;
+
+                if (myfile.is_open()) {
+                    myfile << averageEpoch << "\n";
+                }
+                else cout << "Unable to open file2";
+
                 resetAverageEpoch();
             }
         }
+
+        if (myfile.is_open()) {
+            myfile.close();
+        }
+        else cout << "Unable to open file3";
     }
 
     void runSarsa(int maxRepetitions, int maxEpochs, LookupTable lookupTable) {
         std::cout << "Running SARSA..." << endl;
 
+        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\sarsa.csv");
+
+        if (myfile.is_open()) {
+            myfile << "Average finishing epoch per waiting person\n";
+        }
+        else cout << "Unable to open file1";
+
         for (int repetition = 1; repetition <= maxRepetitions; repetition++) {
             initialise();
-            unsigned long long oldKey = s.toKey();
+            unsigned int oldKey = s.toKey();
             int optimalAction = lookupTable.getOptimalAction(oldKey);
             action = eGreedyActionSelection(epsilon, optimalAction);
             oldKey *= 10;
@@ -108,7 +133,7 @@ public:
             // Main loop
             for (int epoch = 1; epoch <= maxEpochs; epoch++) {
                 s.updateState(action);
-                unsigned long long newKey = s.toKey();
+                unsigned int newKey = s.toKey();
 
                 // Get the best action to take in this state
                 optimalAction = lookupTable.getOptimalAction(newKey);
@@ -133,10 +158,21 @@ public:
             }
 
             if (repetition % 100 == 0) {
-                cout << "Average finishing epoch per waiting person: " << averageEpoch << endl;
+                cout << ((double) repetition)/maxRepetitions*100 << "%" << endl;
+
+                if (myfile.is_open()) {
+                    myfile << averageEpoch << "\n";
+                }
+                else cout << "Unable to open file2";
+
                 resetAverageEpoch();
             }
         }
+
+        if (myfile.is_open()) {
+            myfile.close();
+        }
+        else cout << "Unable to open file3";
     }
 
     void runNormal(int maxRepetitions, int maxEpochs) {
@@ -186,7 +222,6 @@ public:
 
                 // End if there are no waiting people left
                 if (s.isTerminal() || epoch == maxEpochs) {
-                    cout << "Terminating epoch: " << epoch << endl;
                     if (waiting != 0) addToAverageEpoch(epoch);
                     break;
                 }
@@ -194,6 +229,7 @@ public:
 
             if (repetition % 100 == 0) {
                 cout << "Average finishing epoch per waiting person: " << averageEpoch << endl;
+
                 resetAverageEpoch();
             }
         }

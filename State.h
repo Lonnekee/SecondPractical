@@ -49,8 +49,12 @@ public:
         }
     }
 
-    unsigned long long toKey() {
-        unsigned long long key = 1000;
+    /**
+     * Maximum number of floors: 6.
+     * @return
+     */
+    unsigned int toKey() {
+        unsigned int key = 0;
 
         // Iterate over all floors
         bool bits[numberOfFloors];
@@ -63,7 +67,7 @@ public:
         // Iterate over all elevators
         for (int i = 0; i < numberOfElevators; i++) {
             key += elevators[i].currentFloor;
-            key *= 1000;
+            key *= 100;
 
             for (int j = 0; j < numberOfFloors; j++) {
                 bits[j] = elevators[i].goalFloors[j];

@@ -8,20 +8,20 @@ using namespace std;
 
 class LookupTable {
 private:
-    map<unsigned long long, double> lookupTable;
+    map<unsigned int, double> lookupTable;
 
-    void addEntry(unsigned long long key) {
+    void addEntry(unsigned int key) {
         int value = rand() % 11 - 5;
         lookupTable.insert(make_pair(key, value));
     }
 public:
-    int getOptimalAction(unsigned long long key) {
+    int getOptimalAction(unsigned int key) {
         int optimalAction = 0;
         double highestValue = -DBL_MIN;
 
         for (int i = 0; i < pow(3, numberOfElevators); i++) {
             int *possibleActions = new int[numberOfElevators]{i};
-            unsigned long long actionKey = addActionToKey(possibleActions[0], key);
+            unsigned int actionKey = addActionToKey(possibleActions[0], key);
             double value = getValue(actionKey);
             if (value > highestValue) {
                 highestValue = value;
@@ -32,7 +32,7 @@ public:
         return optimalAction;
     }
 
-    unsigned long long addActionToKey(int action, unsigned long long key) {
+    unsigned int addActionToKey(int action, unsigned int key) {
         for (int i = 0; i < numberOfElevators; i++) {
             key *= 10;
             key += action;
@@ -40,7 +40,7 @@ public:
         return key;
     }
 
-    double getValue(unsigned long long key) {
+    double getValue(unsigned int key) {
         auto it = lookupTable.find(key);
         if (it != lookupTable.end()) {
             return it->second;
@@ -50,7 +50,7 @@ public:
         }
     }
 
-    void setValue(unsigned long long key, double value) {
+    void setValue(unsigned int key, double value) {
         auto it = lookupTable.find(key);
         if (it != lookupTable.end()) {
             it->second = value;
