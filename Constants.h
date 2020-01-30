@@ -5,7 +5,7 @@
 #define DOWN 1
 #define STAY 2
 
-static const int numberOfFloors = 6;
+static const int numberOfFloors = 5;
 static const int numberOfElevators = 1;
 static const int maximumWaiting = 4;
 static const int capacity = 2;
