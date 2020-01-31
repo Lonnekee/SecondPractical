@@ -58,13 +58,6 @@ public:
     void runQlearning(int maxRepetitions, int maxEpochs, LookupTable lookupTable) {
         std::cout << "Running Q-learning..." << endl;
 
-        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\qlearning5.csv");
-
-        if (myfile.is_open()) {
-            myfile << "Average finishing epoch per waiting person\n";
-        }
-        else cout << "Unable to open file1";
-
         for (int repetition = 1; repetition <= maxRepetitions; repetition++) {
             initialise();
             for (int epoch = 1; epoch <= maxEpochs; epoch++) {
@@ -95,32 +88,15 @@ public:
             }
 
             if (repetition % 100 == 0) {
-                cout << ((double) repetition)/maxRepetitions*100 << "%" << endl;
-
-                if (myfile.is_open()) {
-                    myfile << averageEpoch << "\n";
-                }
-                else cout << "Unable to open file2";
-
+                cout << ((double) repetition)/maxRepetitions*100 << "%: ";
+                cout << averageEpoch << endl;
                 resetAverageEpoch();
             }
         }
-
-        if (myfile.is_open()) {
-            myfile.close();
-        }
-        else cout << "Unable to open file3";
     }
 
     void runSarsa(int maxRepetitions, int maxEpochs, LookupTable lookupTable) {
         std::cout << "Running SARSA..." << endl;
-
-        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\sarsa5.csv");
-
-        if (myfile.is_open()) {
-            myfile << "Average finishing epoch per waiting person\n";
-        }
-        else cout << "Unable to open file1";
 
         for (int repetition = 1; repetition <= maxRepetitions; repetition++) {
             initialise();
@@ -158,32 +134,15 @@ public:
             }
 
             if (repetition % 100 == 0) {
-                cout << ((double) repetition)/maxRepetitions*100 << "%" << endl;
-
-                if (myfile.is_open()) {
-                    myfile << averageEpoch << "\n";
-                }
-                else cout << "Unable to open file2";
-
+                cout << ((double) repetition)/maxRepetitions*100 << "%: ";
+                cout << averageEpoch << endl;
                 resetAverageEpoch();
             }
         }
-
-        if (myfile.is_open()) {
-            myfile.close();
-        }
-        else cout << "Unable to open file3";
     }
 
     void runNormal(int maxRepetitions, int maxEpochs) {
         cout << "Running normal elevator..." << endl;
-
-        std::ofstream myfile ("C:\\Users\\lonne\\Google Drive\\Bachelor AI\\2019-2020\\Ib\\Reinforcement Learning Practical\\SecondPractical\\Results\\normal5.csv");
-
-        if (myfile.is_open()) {
-            myfile << "Average finishing epoch per waiting person\n";
-        }
-        else cout << "Unable to open file1";
 
         for (int repetition = 1; repetition <= maxRepetitions; repetition++) {
             initialise();
@@ -235,21 +194,11 @@ public:
             }
 
             if (repetition % 100 == 0) {
-                cout << ((double) repetition)/maxRepetitions*100 << "%" << endl;
-
-                if (myfile.is_open()) {
-                    myfile << averageEpoch << "\n";
-                }
-                else cout << "Unable to open file2";
-
+                cout << ((double) repetition)/maxRepetitions*100 << "%: ";
+                cout << averageEpoch << endl;
                 resetAverageEpoch();
             }
         }
-
-        if (myfile.is_open()) {
-            myfile.close();
-        }
-        else cout << "Unable to open file3";
     }
 };
 

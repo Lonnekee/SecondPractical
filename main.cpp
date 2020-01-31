@@ -3,7 +3,6 @@
 #include "LookupTable.h"
 #include "Algorithms.h"
 #include <math.h>
-#include "Plot.h"
 
 
 using namespace std;
@@ -22,12 +21,12 @@ int main() {
         cin >> algorithm;
     }
 
-    int maxRepetitions = 20000;
+    int maxRepetitions = 10000;
     int maxEpochs = 10000;
     LookupTable lookupTable;
     Algorithms td;
 
-    plot();
+    cout << "For every 100 repetitions, the program prints the average number of epochs needed to clear all floors and elevators." << endl;
 
     if (algorithm == 1) { // Q-learning
         alpha = 0.12;
